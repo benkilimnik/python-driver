@@ -799,11 +799,13 @@ class Connection(object):
             self.max_request_id = min(self.max_in_flight - 1, (2 ** 15) - 1)
             # Don't fill the deque with 2**15 items right away. Start with some and add
             # more if needed.
-            initial_size = min(300, self.max_in_flight)
+            # initial_size = min(300, self.max_in_flight)
+            initial_size = self.max_in_flight - 1
             self.request_ids = deque(range(initial_size))
             self.highest_request_id = initial_size - 1
         else:
-            self.max_request_id = min(self.max_in_flight, (2 ** 7) - 1)
+            # self.max_request_id = min(self.max_in_flight, (2 ** 7) - 1)
+            self.max_request_id = (2 ** 7) - 1
             self.request_ids = deque(range(self.max_request_id + 1))
             self.highest_request_id = self.max_request_id
 
@@ -1297,6 +1299,7 @@ class Connection(object):
         log.debug("Received options response on new connection (%s) from %s",
                   id(self), self.endpoint)
         supported_cql_versions = options_response.cql_versions
+        print(f"Supported CQL Versions: {supported_cql_versions}")
         remote_supported_compressions = options_response.options['COMPRESSION']
         self._product_type = options_response.options.get('PRODUCT_TYPE', [None])[0]
 
@@ -1308,6 +1311,8 @@ class Connection(object):
                     % (self.cql_version, supported_cql_versions))
         else:
             self.cql_version = supported_cql_versions[0]
+
+        print(f"CQL version set to {self.cql_version} for this connection")
 
         self._compressor = None
         compression_type = None

@@ -410,7 +410,7 @@ def run_setup(extensions):
     }
 
     setup(
-        name='cassandra-driver',
+        name='cassandra-driver-fork',
         version=__version__,
         description=' DataStax Driver for Apache Cassandra',
         long_description=long_description,

@@ -4473,6 +4473,7 @@ class ResponseFuture(object):
         try:
             # TODO get connectTimeout from cluster settings
             connection, request_id = pool.borrow_connection(timeout=2.0)
+            print(f"_query: Request ID i.e. Stream ID: {request_id}")
             self._connection = connection
             result_meta = self.prepared_statement.result_metadata if self.prepared_statement else []
 
